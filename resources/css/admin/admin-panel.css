@@ -1,0 +1,125 @@
+/* General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #1e1e1e;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+/* Barra lateral */
+.sidebar {
+    background-color: #222222;
+    color: #fff;
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    color: #e44d26; /* Rojo oscuro para el título */
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #fff;
+    margin: 10px 0;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #e44d26;
+    color: #fff;
+}
+
+.sidebar .logout-btn {
+    background-color: #e44d26;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.sidebar .logout-btn:hover {
+    background-color: #c93f20;
+}
+
+/* Contenido principal */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: 100%;
+}
+
+.header {
+    background-color: #333333;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 28px;
+}
+
+.panel-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #2b2b2b;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.panel-container h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.panel-container p {
+    font-size: 18px;
+}
+
+/* Estilo de iconos */
+.sidebar i {
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+/* Estilo de botones */
+button {
+    padding: 12px 20px;
+    background-color: #e44d26;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #c93f20;
+}

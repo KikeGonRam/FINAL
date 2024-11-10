@@ -1,0 +1,171 @@
+/* Reset de estilos básicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Diseño de la barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+}
+
+.navbar .logo h2 {
+    margin: 0;
+}
+
+.auth-links a {
+    margin-left: 15px;
+    text-decoration: none;
+    padding: 10px 15px;
+    color: rgb(255, 255, 255);
+    background-color: #073261;
+    border-radius: 5px;
+}
+
+.auth-links a:hover {
+    background-color: #0e2b4b;
+}
+
+.btn-logout {
+    background-color: #66000a;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+}
+
+/* Estilo de la sección principal (hero) */
+.hero {
+    background: #656665;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.hero .btn-primary {
+    padding: 10px 20px;
+    background-color: #0f2f50;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.hero .btn-primary:hover {
+    background-color: #0f2d4d;
+}
+
+/* Sección "Quiénes somos" */
+.about {
+    padding: 40px 20px;
+    background-color: #666363;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 1.2rem;
+}
+
+/* Sección de servicios */
+.services {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.services ul {
+    list-style-type: none;
+    font-size: 1.1rem;
+}
+
+.services ul li {
+    margin-bottom: 10px;
+}
+
+/* Footer (Pie de página) */
+footer.footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+footer.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .auth-links {
+        margin-top: 10px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .services ul li {
+        font-size: 1rem;
+    }
+
+    footer.footer p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .services ul li {
+        font-size: 0.9rem;
+    }
+
+    footer.footer p {
+        font-size: 12px;
+    }
+}

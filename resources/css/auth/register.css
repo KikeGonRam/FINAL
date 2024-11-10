@@ -1,0 +1,76 @@
+/* Estilos generales para el contenedor de registro */
+.register-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+.register-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-container input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.register-container input:focus {
+    border-color: #e44d26;
+    outline: none;
+}
+
+.register-container button {
+    padding: 10px;
+    background-color: #e44d26;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-container button:hover {
+    background-color: #d7401f;
+}
+
+.register-container a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.register-container a:hover {
+    text-decoration: underline;
+}
+
+.register-container input[type="date"] {
+    width: 100%;
+}
+
+/* Efectos para los enlaces de texto */
+.register-container a {
+    color: #e44d26;
+}
+
+.register-container a:hover {
+    color: #d7401f;
+}
