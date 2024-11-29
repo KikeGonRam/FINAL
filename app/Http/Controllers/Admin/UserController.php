@@ -6,14 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+
 class UserController extends Controller
 {
     // Mostrar lista de usuarios
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        // Filtrar por búsqueda
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        // Usar paginate en lugar de all() para obtener una paginación
+        $users = $query->paginate(5); // Ajusta el número de elementos por página según sea necesario
+
         return view('admin.users.index', compact('users'));
     }
+
 
     // Mostrar formulario de creación de usuario
     public function create()
@@ -73,4 +85,11 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado con éxito');
     }
+
+    public function show($id)
+    {
+        // Puedes redirigir o devolver una respuesta personalizada
+        return redirect()->route('admin.users.index');
+    }
+
 }

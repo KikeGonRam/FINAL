@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Barber;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class BarberController extends Controller
@@ -86,10 +86,13 @@ class BarberController extends Controller
 
     public function logout(Request $request)
     {
+        // Verificar si el barbero está autenticado antes de cerrar sesión
         Auth::guard('barber')->logout();  // Cerrar sesión del barbero
+
         $request->session()->invalidate();  // Invalidar la sesión
         $request->session()->regenerateToken();  // Regenerar el token CSRF
 
         return redirect('/');  // Redirigir a la página principal
+
     }
 }

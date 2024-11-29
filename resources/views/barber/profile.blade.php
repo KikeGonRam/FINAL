@@ -33,9 +33,12 @@
                 <a href="{{ route('barber.products.index')}}" class="p-2 rounded-md text-center hover:bg-gray-700">Gestionar Productos</a>
                 <!-- Button de Cerrar Sesión -->
                 <div class="mt-8 text-center">
-                    <a href="{{ route('barber.login') }}" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700">
-                        Cerrar Sesión
-                    </a>
+                    <form action="{{ route('barber.barber.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700">
+                            Cerrar Sesión
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>

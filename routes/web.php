@@ -7,6 +7,12 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AContactController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\User\ServicioController;
+
 
 Route::get('/', function () {
     return view('welcome');  // Muestra la vista welcome.blade.php
@@ -34,8 +40,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Cerrar sesión del administrador
     Route::post('logout', [AdministradorController::class, 'cerrarSesion'])->name('logout');
 
-    // Rutas de gestión de usuarios para el administrador
-    Route::middleware('auth:admin')->resource('users', UserController::class); // CRUD de usuarios
+
+    // CRUD de usuarios (gestión de usuarios)
+    Route::middleware('auth:admin')->resource('users', UserController::class);
+
+    // Exportar usuarios a PDF
+    Route::get('users/export-pdf', [UserController::class, 'exportPDF'])->name('users.export-pdf');
+
+    Route::resource('users', UserController::class)->except(['show']);
 });
 
 // Rutas del usuario autenticado
@@ -47,6 +59,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [UserProfileController::class, 'show'])->name('user.profile');
     Route::post('/user/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
     Route::post('/user/profile/delete-photo', [UserProfileController::class, 'deletePhoto'])->name('user.profile.deletePhoto');
+    Route::get('/user/barbers', [UserProfileController::class, 'showBarbers'])->name('user.barbers');
+    Route::get('/services', [ServicioController::class, 'index'])->name('user.services.index');
+    Route::get('/services/{service}', [ServicioController::class, 'show'])->name('user.services.show');
+    Route::get('/services/{service}/download', [ServicioController::class, 'downloadPDF'])->name('user.services.downloadPDF');
+
 });
 
 // Ruta de acceso al perfil del usuario sin middleware (si no se requiere autenticación)
@@ -68,6 +85,7 @@ Route::prefix('barber')->name('barber.')->group(function () {
     Route::middleware('auth:barber')->get('dashboard', [BarberController::class, 'dashboard'])->name('dashboard');
     // Ruta para logout
     Route::post('/barber/logout', [BarberController::class, 'logout'])->name('barber.logout');
+
 });
 
 Route::prefix('barber')->name('barber.')->group(function () {
@@ -101,21 +119,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::delete('citas/{cita}', [App\Http\Controllers\Admin\CitaController::class, 'destroy'])->name('citas.destroy');
 
     // Ruta para ver la lista de productos
+    Route::resource('admin/products', App\Http\Controllers\Admin\ProductController::class);
 
-    // Ruta para mostrar el formulario de creación de producto
-    Route::get('products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create'); // Formulario para crear producto
+    // Lista de contactos
+    Route::get('contacts', [AContactController::class, 'index'])->name('contact.index');
 
-    // Ruta para guardar un nuevo producto
-    Route::post('products', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store'); // Guardar producto
+    // Detalles de un contacto
+    Route::get('contact/{id}', [AContactController::class, 'show'])->name('contact.show');
 
-    // Ruta para mostrar el formulario de edición de producto
-    Route::get('products/{product}/edit', [App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('products.edit'); // Editar producto
+    // Eliminar contacto
+    Route::delete('contact/{id}', [AContactController::class, 'destroy'])->name('contact.destroy');
 
-    // Ruta para actualizar un producto existente
-    Route::put('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('products.update'); // Actualizar producto
+    Route::resource('categories', CategoryController::class);
 
-    // Ruta para eliminar un producto
-    Route::delete('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy'); // Eliminar producto
+    Route::resource('services', ServiceController::class);
+
+    Route::resource('promotions', PromotionController::class); // Rutas de CRUD para promociones
 
 });
 
@@ -126,6 +145,8 @@ use App\Http\Controllers\Barber\BarberProductController;
 Route::middleware(['auth:barber'])->group(function () {
     // Ruta para ver todas las citas del barbero
     Route::get('/barbero/citas', [BarberCitaController::class, 'index'])->name('barber.citas.index');
+    Route::get('barber/citas/download-pdf', [BarberCitaController::class, 'downloadPDF'])->name('barber.citas.downloadPDF');
+
 
     // Ruta para actualizar el estado de la cita
     Route::put('/barbero/citas/{cita}/estado', [BarberCitaController::class, 'updateStatus'])->name('barber.citas.updateStatus');
@@ -140,19 +161,12 @@ Route::middleware(['auth:barber'])->group(function () {
     Route::delete('/barbero/productos/{id}', [BarberProductController::class, 'destroy'])->name('barber.products.destroy');
 });
 
-
-
-
-
 use App\Http\Controllers\User\ProductoController;
 
 Route::prefix('user')->name('user.')->middleware('auth')->group(function () {
     // Mostrar los productos en el panel del usuario
     Route::get('productos', [ProductoController::class, 'index'])->name('productos.index');
 });
-
-
-
 
 Route::middleware(['auth'])->group(function () {
     // Rutas para las citas del usuario
@@ -170,10 +184,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/user/citas/{id}', [App\Http\Controllers\User\CitaController::class, 'destroy'])->name('user.citas.destroy');
 });
 
-
-Route::get('products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-
-
 use App\Http\Controllers\Admin\TableExportController;
 
 Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
@@ -189,3 +199,81 @@ Route::get('/admin/tables/export/{format}', [TableExportController::class, 'expo
 
 Route::get('/admin/tables/export/{format}/{table}', [TableExportController::class, 'export'])
     ->name('admin.tables.export');
+
+use App\Http\Controllers\PageController;
+
+Route::get('/politica-de-privacidad', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/terminos-y-condiciones', [PageController::class, 'termsAndConditions'])->name('terms-and-conditions');
+Route::get('/contactanos', [PageController::class, 'contactUs'])->name('contact-us');
+
+use App\Http\Controllers\ContactController;
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contacts.store');
+
+use App\Http\Controllers\CartController;
+
+Route::middleware('auth')->group(function () {
+    Route::post('cart/add/{product}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::get('cart/view', [CartController::class, 'viewCart'])->name('cart.view');
+    Route::get('cart/paypal/{cart}', [CartController::class, 'payWithPaypal'])->name('cart.paypal');
+    Route::get('cart/cash/{cart}', [CartController::class, 'payWithCash'])->name('cart.cash');
+});
+
+Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+
+Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::put('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+use App\Http\Controllers\PDFController;
+
+Route::get('/download-pdf', [PDFController::class, 'download'])->name('download.pdf');
+
+
+Route::get('admin/users/pdf', [UserController::class, 'exportPdf'])->name('admin.users.pdf');
+
+use App\Http\Controllers\ChartController;
+
+Route::get('/admin/charts/index', [ChartController::class, 'index'])->name('admin.charts.index');
+Route::get('/admin/charts/cita', [ChartController::class, 'cita'])->name('admin.chats.cita');
+
+
+Route::get('/admin/charts/asignacion', [ChartController::class, 'getAppointmentsByBarber'])->name('admin.chats.barber');
+
+
+Route::get('/admin/charts/user', [ChartController::class, 'showUsersChart'])->name('admin.chats.user');
+
+Route::get('/admin/charts/product', [ChartController::class, 'showPricesChart'])->name('admin.chats.product');
+
+
+Route::get('/admin/charts/galeria', [ChartController::class, 'galeria'])->name('admin.charts.galeria');
+
+
+Route::get('/admin/charts/price', [ChartController::class, 'showPriceDistribution'])->name('admin.charts.price');
+
+Route::get('/admin/charts/promo', [ChartController::class, 'showPromotionsCharts'])->name('admin.charts.promo');
+
+
+use App\Http\Controllers\PayPalController;
+
+
+Route::get('/paypal/payment', [PayPalController::class, 'createPayment'])->name('paypal.payment');
+Route::get('/paypal/capture', [PayPalController::class, 'capturePayment'])->name('paypal.capture');
+Route::get('/paypal/payment/{cartId}', [PayPalController::class, 'createPayment'])->name('cart.paypala');
+Route::get('/cart/paypal/{cartId}', [PayPalController::class, 'createPayment'])->name('cart.paypala');
+
+
+Route::get('/cart/paypal-unavailable', function () {
+    return view('cart.paypal_unavailable');
+})->name('cart.paypal_unavailable');
+
+
+use App\Http\Controllers\User\PromotionsController; // Importa el controlador de promociones del cliente
+
+Route::get('user/promotions', [PromotionsController::class, 'index'])->name('user.promotions.index');
+Route::get('user/promotions/{promotion}/download', [PromotionsController::class, 'download'])->name('user.promotions.download');

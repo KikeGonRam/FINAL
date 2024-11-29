@@ -16,4 +16,21 @@ class Admin extends Authenticatable // Cambia Model a Authenticatable
         'email',
         'password'
     ];
+
+
+    protected function getTableData($table)
+    {
+        $models = [
+            'users' => User::class,
+            'products' => Product::class,
+            'appointments' => Cita::with('cliente', 'barber'),
+            'barbers' => Barber::class,
+            'contacts' => Contact::class,
+            'categories' => Category::class,
+            'services' => Service::class,
+            'promotions' => Promotion::class,
+        ];
+
+        return isset($models[$table]) ? $models[$table]::all() : null;
+    }
 }

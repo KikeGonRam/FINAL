@@ -108,6 +108,25 @@
                     <i class="fas fa-calendar-alt w-5"></i>
                     <span>Citas</span>
                 </a>
+                <a href="{{ route('admin.contact.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Contactos</span>
+                </a>
+
+                <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Categorias</span>
+                </a>
+
+                <a href="{{ route('admin.services.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Servicios</span>
+                </a>
+
+                <a href="{{ route('admin.tables.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Gestionar Tablas</span>
+                </a>
             </nav>
 
             <!-- Logout Button -->

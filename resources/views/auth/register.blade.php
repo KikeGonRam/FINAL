@@ -185,12 +185,16 @@
       </form>
 
       <!-- Contenido Lateral -->
-      <div class="hidden lg:flex flex-col justify-center text-right space-y-4 relative z-10 text-white">
-        <h2 class="text-4xl font-bold uppercase tracking-wide">¡Bienvenido!</h2>
-        <p class="text-lg max-w-[300px] ml-auto opacity-90">
-          Únete a nuestra comunidad y disfruta de todas las ventajas de tener una cuenta personalizada.
+      <div class="flex flex-col justify-center text-center space-y-4 relative z-10 text-white px-6 lg:px-0">
+        <h2 class="text-4xl font-bold uppercase tracking-wide">¡Bienvenido a DARKETO!</h2>
+        <p class="text-lg max-w-[350px] mx-auto opacity-90">
+            ¡Estamos emocionados de que te unas! Regístrate y empieza a disfrutar de todos los beneficios exclusivos que tenemos para ti.
         </p>
-      </div>
+        <p class="text-sm text-gray-300">
+            Regístrate ahora y empieza a gestionar tus citas de manera fácil y rápida.
+        </p>
+    </div>
+    
     </article>
 
     <!-- Validación del formulario -->

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Barber;
+
 
 class UserProfileController extends Controller
 {
@@ -19,27 +21,34 @@ class UserProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-
+    
         // Validar los datos del formulario
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         // Actualizar la información del usuario
         $user->name = $request->name;
         $user->email = $request->email;
-
+    
         if ($request->hasFile('photo')) {
+            // Eliminar la foto anterior si existe
+            if ($user->photo) {
+                Storage::delete('public/' . $user->photo);
+            }
+    
+            // Guardar la nueva foto en el directorio 'profile_photos'
             $imagePath = $request->file('photo')->store('profile_photos', 'public');
             $user->photo = $imagePath;
         }
-
+    
         $user->save(); // Guardar los cambios
-
+    
         return redirect()->route('user.profile')->with('success', 'Perfil actualizado correctamente');
     }
+    
 
     public function updateProfile(Request $request)
     {
@@ -79,5 +88,13 @@ class UserProfileController extends Controller
         }
 
         return redirect()->route('user.profile')->with('success', 'Foto eliminada con éxito.');
+    }
+
+    public function showBarbers()
+    {
+        // Obtener todos los barberos
+        $barbers = Barber::all(); // Si necesitas paginación, puedes usar ->paginate(10)
+
+        return view('user.barbers', compact('barbers'));
     }
 }

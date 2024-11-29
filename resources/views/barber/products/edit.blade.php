@@ -29,6 +29,21 @@
             @csrf
             @method('PUT')
 
+<!-- Campo Categoría -->
+<div class="mb-4">
+    <label for="category_id" class="block text-gray-700 text-lg font-medium mb-2">Categoría</label>
+    <select name="category_id" id="category_id" class="form-control w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <option value="" disabled selected>Seleccione una categoría</option>
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
+
             <!-- Nombre del producto -->
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 text-lg font-medium mb-2">Nombre</label>
@@ -47,20 +62,21 @@
                 <input type="number" name="price" class="form-control w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ $product->price }}" required step="0.01">
             </div>
 
-            <!-- Foto del producto -->
-            <div class="mb-4">
-                <label for="photo" class="block text-gray-700 text-lg font-medium mb-2">Foto</label>
-                <input type="file" name="photo" class="form-control w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="photo" onchange="previewImage(event)">
-                
-                <!-- Muestra de imagen actual si existe -->
-                <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen del producto" width="200">
+<!-- Foto del producto -->
+<div class="mb-4">
+    <label for="image" class="block text-gray-700 text-lg font-medium mb-2">Foto</label>
+    <input type="file" name="image" class="form-control w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" id="image" onchange="previewImage(event)">
+    
+    <!-- Muestra de imagen actual si existe -->
+    <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen del producto" width="200">
 
-                <!-- Vista previa de la nueva foto seleccionada -->
-                <div class="mt-4 flex justify-center" id="imagePreviewContainer" style="display: none;">
-                    <p class="text-gray-600 text-center mb-2">Vista previa de la nueva foto:</p>
-                    <img id="imagePreview" class="rounded-md shadow-sm max-w-full h-auto mx-auto">
-                </div>
-            </div>
+    <!-- Vista previa de la nueva foto seleccionada -->
+    <div class="mt-4 flex justify-center" id="imagePreviewContainer" style="display: none;">
+        <p class="text-gray-600 text-center mb-2">Vista previa de la nueva foto:</p>
+        <img id="imagePreview" class="rounded-md shadow-sm max-w-full h-auto mx-auto">
+    </div>
+</div>
+
 
             <!-- Botones de acción -->
             <div class="flex justify-between mt-6">

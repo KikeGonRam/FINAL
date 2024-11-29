@@ -35,7 +35,7 @@
                 <a href="{{ route('barber.products.index')}}" class="p-2 rounded-md text-center hover:bg-gray-700">Gestionar Productos</a>
                 <!-- Button de Cerrar Sesión -->
                 <div class="mt-8 text-center">
-                    <a href="{{ route('barber.login') }}" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700">
+                    <a href="{{ route('barber.barber.logout') }}" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700">
                         Cerrar Sesión
                     </a>
                 </div>
@@ -69,6 +69,7 @@
                         <th class="py-3 px-4 text-left">Descripción</th>
                         <th class="py-3 px-4 text-left">Precio</th>
                         <th class="py-3 px-4 text-left">Foto</th>
+                        <th class="py-3 px-4 text-left">Categoria</th>
                         <th class="py-3 px-4 text-left">Acciones</th>
                     </tr>
                 </thead>
@@ -81,6 +82,7 @@
                             <td class="py-3 px-4">
                                 <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen del producto" width="200">
                             </td>
+                            <td class="py-3 px-4">{{ $product->category ? $product->category->name : 'Sin Categoría' }}</td>
                             <td class="py-3 px-4 flex items-center space-x-2">
                                 <a href="{{ route('barber.products.show', $product->id) }}"
                                    class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-md">Ver</a>

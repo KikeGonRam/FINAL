@@ -9,114 +9,162 @@ use App\Models\Barber;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\Category;
+use App\Models\Promotion;
+use App\Models\Service;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TableExportController extends Controller
 {
-    // Método index para cargar la vista principal o realizar acciones
+    private const ALLOWED_TABLES = [
+        'users',
+        'products',
+        'appointments',
+        'barbers',
+        'contacts',
+        'categories',
+        'services',
+        'promotions'
+    ];
+
+    private const ALLOWED_FORMATS = ['pdf', 'csv', 'word'];
+
+    private const MODEL_MAPPING = [
+        'users' => User::class,
+        'products' => Product::class,
+        'appointments' => Cita::class,
+        'barbers' => Barber::class,
+        'contacts' => Contact::class,
+        'categories' => Category::class,
+        'services' => Service::class,
+        'promotions' => Promotion::class,
+    ];
+
     public function index()
     {
-        return view('admin.tables.index');
-    }
-
-    // Exportar en varios formatos
-    public function export(Request $request, $format, $table)
-    {
-        // Recoger los datos según la tabla seleccionada
-        switch ($table) {
-            case 'users':
-                $data = User::all();
-                break;
-            case 'products':
-                $data = Product::all();
-                break;
-            case 'appointments':
-                $data = Cita::with('cliente', 'barber')->get();
-                break;
-            case 'barbers':
-                $data = Barber::all();
-                break;
-            default:
-                return redirect()->back()->with('error', 'Tabla no soportada');
-        }
-
-        // Llamar al método para exportar los datos según el formato
-        return $this->exportData($data, $format, $table);
-    }
-
-    // Método para exportar según el formato
-    protected function exportData($data, $format, $table)
-    {
-        // Verificar el formato de exportación (PDF)
-        if ($format == 'pdf') {
-            // Construir el nombre de la vista según el tipo de tabla
-            $view = 'admin.export.' . $table . '_pdf';
-            $pdf = Pdf::loadView($view, compact('data')); // Pasar los datos a la vista
-            return $pdf->download($table . '.pdf');
-        }
-
-        // Otros formatos como CSV o Word pueden ser gestionados aquí
-        switch ($format) {
-            case 'csv':
-                return $this->exportCsv($data, $table);
-            case 'word':
-                return $this->exportWord($data, $table);
-            default:
-                return redirect()->back()->with('error', 'Formato no soportado');
-        }
-    }
-
-    // Método para exportar en formato CSV
-    protected function exportCsv($data, $table)
-    {
-        // Lógica para exportar a CSV
-        return response()->stream(function () use ($data) {
-            $handle = fopen('php://output', 'w');
-            // Escribir encabezado de las columnas
-            fputcsv($handle, array_keys($data->first()->toArray()));
-
-            // Escribir los datos
-            foreach ($data as $row) {
-                fputcsv($handle, $row->toArray());
-            }
-            fclose($handle);
-        }, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $table . '.csv"',
+        return view('admin.tables.index', [
+            'allowedTables' => self::ALLOWED_TABLES,
+            'allowedFormats' => self::ALLOWED_FORMATS
         ]);
     }
 
-    // Método para exportar en formato Word
-    protected function exportWord($data, $table)
+    public function export(Request $request, string $format, string $table)
     {
-        // Crear el objeto PhpWord
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $section = $phpWord->addSection();
-
-        // Títulos de las columnas
-        $section->addText(ucwords($table));
-
-        // Crear la tabla en Word
-        $tableWord = $section->addTable();
-        $tableWord->addRow();
-        
-        // Escribir los encabezados
-        foreach ($data->first()->toArray() as $key => $value) {
-            $tableWord->addCell(2000)->addText(ucwords($key));
+        if (!$this->isValidExportRequest($format, $table)) {
+            return redirect()->back()
+                ->with('error', 'Tabla o formato no soportado');
         }
 
-        // Escribir los datos
-        foreach ($data as $row) {
-            $tableWord->addRow();
-            foreach ($row->toArray() as $value) {
-                $tableWord->addCell(2000)->addText($value);
+        try {
+            $data = $this->getTableData($table);
+
+            if ($data->isEmpty()) {
+                return redirect()->back()
+                    ->with('error', 'No hay datos disponibles para exportar');
             }
+
+            return $this->exportData($data, $format, $table);
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error al exportar datos: ' . $e->getMessage());
+        }
+    }
+
+    protected function isValidExportRequest(string $format, string $table): bool
+    {
+        return in_array($table, self::ALLOWED_TABLES) &&
+            in_array($format, self::ALLOWED_FORMATS);
+    }
+
+    protected function getTableData(string $table)
+    {
+        $model = self::MODEL_MAPPING[$table] ?? null;
+
+        if (!$model) {
+            return collect();
         }
 
-        // Guardar el archivo Word y devolverlo al usuario
-        $fileName = $table . '.docx';
-        $filePath = storage_path('app/public/' . $fileName);
-        $phpWord->save($filePath, 'Word2007');
-        
-        return response()->download($filePath)->deleteFileAfterSend(true);
+        if ($table === 'appointments') {
+            return $model::with(['cliente', 'barber'])->get();
+        }
+
+        return $model::all();
+    }
+
+    protected function exportData($data, string $format, string $table)
+    {
+        return match ($format) {
+            'pdf' => $this->exportToPdf($data, $table),
+            'csv' => $this->exportToCsv($data, $table),
+            'word' => $this->exportToWord($data, $table),
+            default => redirect()->back()
+                ->with('error', 'Formato no soportado'),
+        };
+    }
+
+    protected function exportToPdf($data, string $table)
+    {
+        $view = "admin.export.{$table}_pdf";
+
+        if (!View::exists($view)) {
+            return redirect()->back()
+                ->with('error', 'Vista para PDF no disponible');
+        }
+
+        return Pdf::loadView($view, compact('data'))
+            ->download("{$table}.pdf");
+    }
+
+    protected function exportToCsv($data, string $table): StreamedResponse
+    {
+        return response()->stream(
+            function () use ($data) {
+                $handle = fopen('php://output', 'w');
+
+                // Escribir encabezados
+                $firstRow = $data->first()->toArray();
+                fputcsv($handle, array_keys($firstRow));
+
+                // Escribir datos
+                foreach ($data as $row) {
+                    fputcsv($handle, $this->prepareCsvRow($row->toArray()));
+                }
+
+                fclose($handle);
+            },
+            200,
+            $this->getCsvHeaders($table)
+        );
+    }
+
+    protected function prepareCsvRow(array $row): array
+    {
+        return array_map(function ($value) {
+            return is_array($value) ? json_encode($value) : $value;
+        }, $row);
+    }
+
+    protected function getCsvHeaders(string $table): array
+    {
+        return [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => sprintf(
+                'attachment; filename="%s_%s.csv"',
+                $table,
+                date('Ymd_His')
+            ),
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ];
+    }
+
+    protected function exportToWord($data, string $table)
+    {
+        // Implementar lógica para exportación a Word
+        return redirect()->back()
+            ->with('error', 'Exportación a Word no implementada');
     }
 }

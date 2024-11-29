@@ -4,16 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barber;;
+
 use Illuminate\Http\Request;
 
 class BarberController extends Controller
 {
     // Método para mostrar la lista de barberos
-    public function index()
+    public function index(Request $request)
     {
-        $barbers = Barber::all(); // Obtener todos los barberos
-        return view('admin.barbers.index', compact('barbers'));
+        // Obtener el término de búsqueda (si existe)
+        $search = $request->input('search');
+
+        // Realizar la consulta con paginación y filtrado
+        $barbers = Barber::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
+        })
+            ->paginate(5); // Paginación de 10 barberos por página
+
+        // Pasar los barberos paginados a la vista
+        return view('admin.barbers.index', compact('barbers', 'search'));
     }
+
 
     // Método para mostrar el formulario de creación de un barbero
     public function create()

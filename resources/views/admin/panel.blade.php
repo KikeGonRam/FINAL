@@ -106,16 +106,51 @@
                 <span>Citas</span>
             </a>
 
+            <a href="{{ route('admin.contact.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Contactos</span>
+            </a>
+
+            <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Categorias</span>
+            </a>
+
+            <a href="{{ route('admin.services.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Servicios</span>
+            </a>
+
+            <a href="{{ route('admin.products.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-box"></i>
+                <span>Productos</span>
+            </a>
+
+            <a href="{{ route('admin.tables.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Tablas</span>
+            </a>
+
+            <a href="{{ route('admin.charts.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Graficas</span>
+            </a>
+
+            <a href="{{ route('admin.promotions.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                <i class="fas fa-address-book"></i>
+                <span>Promociones</span>
+            </a>
+
         </nav>
 
         <div class="absolute bottom-6 left-6 right-6">
-            <form action="{{ route('admin.logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Cerrar sesión</span>
-                </button>
-            </form>
+                <form action="{{ route('admin.logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar sesión</span>
+                    </button>
+                </form>
         </div>
     </div>
 
@@ -173,28 +208,19 @@
                                 <th class="px-4 py-2">Barbero</th>
                                 <th class="px-4 py-2">Fecha</th>
                                 <th class="px-4 py-2">Estado</th>
-                                <th class="px-4 py-2">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($appointmentsToday as $appointment)
                                 <tr>
                                     <td class="px-4 py-2">{{ $appointment->id }}</td>
-                                    <td class="px-4 py-2">{{ $appointment->cliente->nombre }}</td>
-                                    <td class="px-4 py-2">{{ $appointment->barber->nombre }}</td>
+                                    <td class="px-4 py-2">{{ $appointment->cliente->name }}</td>
+                                    <td class="px-4 py-2">{{ $appointment->barber->name }}</td>
                                     <td class="px-4 py-2">{{ $appointment->fecha }}</td>
                                     <td class="px-4 py-2">
                                         <span class="badge {{ $appointment->estado == 'pendiente' ? 'bg-yellow-500' : ($appointment->estado == 'aceptada' ? 'bg-green-500' : 'bg-red-500') }}">
                                             {{ ucfirst($appointment->estado) }}
                                         </span>
-                                    </td>
-                                    <td class="px-4 py-2">
-                                        <a href="{{ route('appointments.edit', $appointment->id) }}" class="text-blue-500">Editar</a> |
-                                        <form action="{{ route('appointments.destroy', $appointment->id) }}" method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500">Eliminar</button>
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -214,5 +240,7 @@
             </div>
         </div>
     </div>
+
+    
 </body>
 </html>

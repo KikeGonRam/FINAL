@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Barber;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class BarberProductController extends Controller
 {
@@ -18,7 +19,8 @@ class BarberProductController extends Controller
     // Mostrar el formulario para crear un producto
     public function create()
     {
-        return view('barber.products.create');
+        $categories = Category::all(); // Obtener todas las categorías
+        return view('barber.products.create', compact('categories'));
     }
 
     // Almacenar el nuevo producto
@@ -29,6 +31,7 @@ class BarberProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id', // Asegúrate de que la categoría exista
             'image' => 'required|image|max:2048',
         ]);
 
@@ -37,6 +40,7 @@ class BarberProductController extends Controller
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
+        $product->category_id = $request->category_id; // Asocia la categoría seleccionada
 
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('products_image', 'public');
@@ -59,7 +63,9 @@ class BarberProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('barber.products.edit', compact('product'));
+        $categories = Category::all();
+
+        return view('barber.products.edit', compact('product', 'categories'));
     }
 
     // Actualizar un producto
@@ -71,16 +77,20 @@ class BarberProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric',
             'image' => 'nullable|image|max:2048',
+            'category_id' => 'required|exists:categories,id', // Validación para asegurarse de que la categoría exista
+
         ]);
 
         $product = Product::findOrFail($id);
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
+        $product->category_id = $request->category_id; // Actualizando la categoría
+
 
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('products_image', 'public');
-            $product->photo = $photoPath;
+            $product->image = $photoPath;
         }
 
         $product->save();

@@ -130,6 +130,31 @@
                         <i class="fas fa-calendar-alt w-5"></i>
                         <span>Citas</span>
                     </a>
+
+                    <a href="{{ route('admin.contact.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                        <i class="fas fa-address-book"></i>
+                        <span>Contactos</span>
+                    </a>
+
+                    <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                        <i class="fas fa-address-book"></i>
+                        <span>Categorias</span>
+                    </a>
+
+                    <a href="{{ route('admin.services.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                        <i class="fas fa-address-book"></i>
+                        <span>Servicios</span>
+                    </a>
+
+                    <a href="{{ route('admin.tables.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                        <i class="fas fa-address-book"></i>
+                        <span>Gestionar Tablas</span>
+                    </a>
+
+                    <a href="{{ route('admin.charts.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                        <i class="fas fa-address-book"></i>
+                        <span>Graficas</span>
+                    </a>
                 </nav>
     
                 <!-- Logout Button -->
@@ -158,6 +183,15 @@
                         <span>Crear Barbero</span>
                     </a>
                 </div>
+
+<!-- Formulario de Búsqueda -->
+<form method="GET" action="{{ route('admin.barbers.index') }}" class="mb-4">
+    <input type="text" name="search" value="{{ old('search', $search) }}" placeholder="Buscar barbero..."
+           class="px-4 py-2 border rounded-lg text-black">
+    <button type="submit" class="bg-beige text-black font-medium py-2 px-4 rounded-lg ml-2">Buscar</button>
+</form>
+
+
 
                 <!-- Mostrar mensaje de éxito -->
                 @if(session('success'))
@@ -206,6 +240,11 @@
                         </table>
                     </div>
                 </div>
+
+                    <!-- Paginación -->
+    <div class="mt-4">
+        {{ $barbers->links() }} <!-- Esto generará los enlaces de paginación -->
+    </div>
 
             </div>
 

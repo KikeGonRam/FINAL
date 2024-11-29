@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -40,7 +39,6 @@
             }
         }
     </script>
-
     <style>
         * {
             font-family: 'Poppins', sans-serif;
@@ -106,6 +104,26 @@
                 <a href="{{ route('admin.citas.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200 transition-all duration-300">
                     <i class="fas fa-calendar-alt w-5"></i>
                     <span>Citas</span>
+                </a>
+
+                <a href="{{ route('admin.contact.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Contactos</span>
+                </a>
+
+                <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Categorias</span>
+                </a>
+
+                <a href="{{ route('admin.services.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Servicios</span>
+                </a>
+
+                <a href="{{ route('admin.tables.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Gestionar Tablas</span>
                 </a>
             </nav>
 

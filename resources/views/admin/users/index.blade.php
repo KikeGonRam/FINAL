@@ -128,6 +128,36 @@
                     <i class="fas fa-calendar-alt w-5"></i>
                     <span>Citas</span>
                 </a>
+
+                <a href="{{ route('admin.contact.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Contactos</span>
+                </a>
+
+                <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-tags"></i>
+                    <span>Categorías</span>
+                </a>
+
+                <a href="{{ route('admin.services.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Servicios</span>
+                </a>
+
+                <a href="{{ route('admin.tables.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-table"></i>
+                    <span>Gestionar Tablas</span>
+                </a>
+
+                <a href="{{ route('admin.charts.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Graficas</span>
+                </a>
+
+                <a href="{{ route('admin.promotions.index') }}" class="sidebar-link flex items-center gap-3 py-3 px-4 rounded-lg text-beige hover:bg-dark-200">
+                    <i class="fas fa-address-book"></i>
+                    <span>Promociones</span>
+                </a>
             </nav>
 
             <!-- Logout Button -->
@@ -147,31 +177,30 @@
             <!-- Header -->
             <header class="mb-8">
                 <h1 class="text-3xl font-semibold text-white">Gestión de Usuarios</h1>
+                <form method="GET" action="{{ route('admin.users.index') }}" class="mt-4 flex gap-4">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}" 
+                        placeholder="Buscar por nombre o email" 
+                        class="w-full p-2 rounded-lg border border-dark-200 bg-dark-300 text-white placeholder-dark-100 focus:ring focus:ring-beige-light"
+                    >
+                    <button 
+                        type="submit" 
+                        class="bg-beige hover:bg-beige-dark text-dark-400 font-medium py-2 px-6 rounded-lg transition-colors duration-300 shadow-md"
+                    >
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </form>
             </header>
-
-            <!-- Action Button -->
-            <div class="mb-6">
-                <a href="{{ route('admin.users.create') }}" 
-                   class="bg-beige hover:bg-beige-dark text-dark-400 font-medium py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors duration-300 shadow-md">
-                    <i class="fas fa-plus"></i>
-                    <span>Crear Usuario</span>
-                </a>
-            </div>
-
-            <!-- Notifications -->
-            @if(session('success'))
-                <div class="bg-green-500 text-white p-4 rounded-lg mb-6 shadow-md flex items-center gap-3">
-                    <i class="fas fa-check-circle"></i>
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-500 text-white p-4 rounded-lg mb-6 shadow-md flex items-center gap-3">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ session('error') }}
-                </div>
-            @endif
+            
+                        <!-- Action Button -->
+                        <div class="mb-6">
+                            <a href="{{ route('admin.users.create') }}" class="bg-beige hover:bg-beige-dark text-dark-400 font-medium py-2 px-6 rounded-lg inline-flex items-center gap-2 transition-colors duration-300 shadow-md">
+                                <i class="fas fa-plus"></i>
+                                <span>Crear Cita</span>
+                            </a>
+                        </div>
 
             <!-- Users Table -->
             <div class="bg-dark-300 rounded-xl shadow-xl overflow-hidden">
@@ -191,30 +220,28 @@
                                     <td class="py-4 px-6">{{ $user->id }}</td>
                                     <td class="py-4 px-6">{{ $user->name }}</td>
                                     <td class="py-4 px-6">{{ $user->email }}</td>
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center justify-center gap-3">
-                                            <a href="{{ route('admin.users.edit', $user->id) }}" 
-                                               class="bg-yellow-500 hover:bg-yellow-600 text-dark-400 py-2 px-4 rounded-md transition-colors duration-300 flex items-center gap-2">
-                                                <i class="fas fa-edit"></i>
-                                                <span>Editar</span>
-                                            </a>
-                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" 
-                                                        class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md transition-colors duration-300 flex items-center gap-2"
-                                                        onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                    <span>Eliminar</span>
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <td class="py-4 px-6 text-center flex justify-center gap-2">
+                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-600">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-600">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-6">
+                {{ $users->links() }}
             </div>
         </div>
     </main>

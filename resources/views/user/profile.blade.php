@@ -7,6 +7,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Perfil de Usuario</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .footer p {
+    margin: 10px 0;
+}
+
+.footer p a {
+    color: #ffd700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer p a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+    </style>
+
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -29,11 +46,14 @@
                 <a href="{{ route('user.profile') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Perfil</a>
                 <a href="{{ route('user.citas.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Gestionar Citas</a>
                 <a href="{{ route('user.productos.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Productos</a>
-                <!-- Formulario para cerrar sesión -->
+                <a href="{{ route('user.barbers') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Barberos</a>
+                <a href="{{ route('user.promotions.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Promociones</a>
+                <a href="{{ route('user.services.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Servicios</a>
+
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md mt-4">Cerrar sesión</button>
-                </form>
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Cerrar sesión</button>
+                    </form>
             </nav>
         </div>
 
@@ -48,8 +68,7 @@
                 <h3 class="text-xl font-semibold text-gray-800 text-center">Foto de Perfil</h3>
                 <div class="text-center mt-4">
                     @if($user->photo)
-                        <img src="{{ asset('storage/' . $user->photo) }}" alt="Foto de perfil"
-                            class="w-32 h-32 object-cover rounded-full mx-auto">
+                    <img src="{{ asset('storage/' . $user->photo) }}" alt="Foto de perfil"                            class="w-32 h-32 object-cover rounded-full mx-auto">
                         <form action="{{ route('user.profile.deletePhoto') }}" method="POST"
                             onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta foto?')">
                             @csrf
@@ -94,6 +113,15 @@
 
         </div>
     </div>
+
+    <footer class="footer">
+        <p>
+            &copy; 2024 Barbería DARKETO. Todos los derechos reservados.
+            <a href="{{ route('privacy-policy') }}">Política de Privacidad</a> |
+            <a href="{{ route('terms-and-conditions') }}">Términos y Condiciones</a> |
+            <a href="{{ route('contact-us') }}">Contáctanos</a>
+        </p>
+    </footer>
 
 </body>
 

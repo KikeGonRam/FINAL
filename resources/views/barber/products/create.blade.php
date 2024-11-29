@@ -34,6 +34,17 @@
         <form action="{{ route('barber.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             
+                        <!-- Campo Categoría -->
+                        <div>
+                            <label for="category_id" class="block text-gray-700 font-semibold mb-2">Categoría</label>
+                            <select name="category_id" id="category_id" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+                                <option value="" disabled selected>Seleccionar categoría</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+            
             <!-- Campo Nombre -->
             <div>
                 <label for="name" class="block text-gray-700 font-semibold mb-2">Nombre del Producto</label>

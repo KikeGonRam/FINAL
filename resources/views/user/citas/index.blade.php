@@ -9,6 +9,23 @@
     <link rel="icon" href="{{ asset('images/icono.png') }}" type="image/png">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .footer p {
+    margin: 10px 0;
+}
+
+.footer p a {
+    color: #ffd700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer p a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -33,11 +50,13 @@
                 <a href="{{ route('user.profile') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Perfil</a>
                 <a href="{{ route('user.citas.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Gestionar Citas</a>
                 <a href="{{ route('user.productos.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Productos</a>
-                <!-- Button de Cerrar Sesión -->
-                <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                <a href="{{ route('user.barbers') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Barberos</a>
+                <a href="{{ route('user.promotions.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Promociones</a>
+                <a href="{{ route('user.services.index') }}" class="p-2 rounded-md text-center hover:bg-gray-700">Ver Servicios</a>
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md w-full">Cerrar sesión</button>
-                </form>
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Cerrar sesión</button>
+                    </form>
             </nav>
         </div>
 
@@ -49,6 +68,8 @@
                 <h1 class="text-3xl font-semibold text-gray-800">Mis Citas</h1>
                 <p class="text-lg text-gray-600 mt-2">A continuación se muestra el estado de tus citas programadas.</p>
             </div>
+
+            
 
             <!-- Tabla de Citas -->
             <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
@@ -82,7 +103,6 @@
                                     <a href="{{ route('user.citas.show', $cita->id) }}" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 text-sm">Ver Detalles</a>
 
                                     <!-- Botón de editar cita -->
-                                    <a href="{{ route('user.citas.edit', $cita->id) }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 text-sm">Editar</a>
 
                                     <!-- Botón de eliminar cita -->
                                     <form action="{{ route('user.citas.destroy', $cita->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta cita?')" class="inline">
@@ -117,6 +137,15 @@
             });
         }
     </script>
+
+<footer class="footer">
+    <p>
+        &copy; 2024 Barbería DARKETO. Todos los derechos reservados.
+        <a href="{{ route('privacy-policy') }}">Política de Privacidad</a> |
+        <a href="{{ route('terms-and-conditions') }}">Términos y Condiciones</a> |
+        <a href="{{ route('contact-us') }}">Contáctanos</a>
+    </p>
+</footer>
 
 </body>
 

@@ -20,6 +20,13 @@
         <!-- Detalles del Producto -->
         <div class="space-y-4">
 
+                        <!-- Nombre del Categoria -->
+                        <div>
+                            <label class="block text-gray-700 text-lg font-medium mb-1">Categoria</label>
+                            <input type="text" name="name" value="{{ $product->category ? $product->category->name : 'Sin Categoria' }}" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none" disabled>
+                        </div>
+
             <!-- Nombre del Producto -->
             <div>
                 <label class="block text-gray-700 text-lg font-medium mb-1">Nombre</label>

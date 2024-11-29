@@ -68,6 +68,6 @@ class UserAuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login');  // Redirigir a la página de login
+        return redirect('/');  // Redirigir a la página de login
     }
 }

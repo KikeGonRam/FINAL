@@ -8,6 +8,22 @@
     <title>Crear Cita</title>
     <link rel="icon" href="{{ asset('images/icono.png') }}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .footer p {
+    margin: 10px 0;
+}
+
+.footer p a {
+    color: #ffd700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer p a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -82,6 +98,15 @@
             </div>
         </form>
     </div>
+
+    <footer class="footer">
+        <p>
+            &copy; 2024 Barbería DARKETO. Todos los derechos reservados.
+            <a href="{{ route('privacy-policy') }}">Política de Privacidad</a> |
+            <a href="{{ route('terms-and-conditions') }}">Términos y Condiciones</a> |
+            <a href="{{ route('contact-us') }}">Contáctanos</a>
+        </p>
+    </footer>
 
 </body>
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Cita;
-use App\Models\User; 
+use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Barber;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +61,6 @@ class AdministradorController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.panel');
+        return redirect('/');
     }
 }

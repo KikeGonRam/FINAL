@@ -7,16 +7,32 @@ use App\Models\Cita;
 use App\Models\Barber;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+
 
 class CitaController extends Controller
 {
     // Método para mostrar la lista de citas
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener todas las citas junto con los detalles de cliente y barbero
-        $citas = Cita::with(['cliente', 'barber'])->get();
-        return view('admin.citas.index', compact('citas'));
+        // Obtener el término de búsqueda
+        $search = $request->get('search');
+
+        // Obtener las citas con paginación y filtrado si se proporcionó un término de búsqueda
+        $citas = Cita::with(['cliente', 'barber'])
+            ->when($search, function ($query) use ($search) {
+                return $query->whereHas('cliente', function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                })
+                    ->orWhereHas('barber', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            ->paginate(5); // Paginación de 10 elementos por página
+
+        return view('admin.citas.index', compact('citas', 'search'));
     }
+
 
     // Método para mostrar el formulario de creación de una cita
     public function create()
