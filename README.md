@@ -58,7 +58,7 @@ Este proyecto es una plataforma de gestión de citas para la barbería DARKETO, 
    php artisan serve
    ```
 
-# Acceso a Usuarios
+# Acceso al Administrador 
 
 Administrador:
 
@@ -109,24 +109,6 @@ Telescope y Debugbar para depuración en desarrollo.
 Para un manual de usuario completo y guía de instalación, visita el archivo de documentación en docs.
 
 
-Contribución
-```bash
-1. Haz un fork del proyecto.
-
-
-2. Crea una rama nueva (git checkout -b feature/nueva-funcionalidad).
-
-
-3. Realiza tus cambios y crea commits descriptivos.
-
-
-4. Abre un pull request detallando tus cambios.
-```
-
-
-Pruebas Automatizadas
-
-Usamos herramientas de prueba como Playwright y alternativas a Selenium compatibles con PHP. Para ejecutar las pruebas, sigue la configuración descrita en el archivo tests/README.md.
 
 
 ---
@@ -138,9 +120,4 @@ Para el ingreso como administrador, recuerda usar el correo admin@darketo.com y 
 
 ---
 
-Contacto
-
-Para más información o soporte, por favor contacta al equipo de desarrollo a través de [info@darketo.com].
-
-¿Te gustaría que el README incluya instrucciones sobre cómo configurar Google OAuth, o ya tienes esto implementado?
 
